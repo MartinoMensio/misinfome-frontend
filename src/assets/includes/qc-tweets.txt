@@ -1,0 +1,1 @@
+{"statuses":[],"search_metadata":{"completed_in":0.007,"max_id":1054342602139389952,"max_id_str":"1054342602139389952","query":"%23qualichain","refresh_url":"?since_id=1054342602139389952&q=%23qualichain&lang=en&include_entities=1","count":100,"since_id":0,"since_id_str":"0"}}

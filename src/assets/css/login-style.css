@@ -1,0 +1,46 @@
+/*
+ * Author: Damian Dadswell
+ * URL: http://kmi.open.ac.uk
+ *
+ * Theme Name: QualiChain
+ * URL: https://qualichain-project.eu/
+ * Version: 1.0
+ */
+
+/*------------------------------------------------
+#
+# login
+#
+--------------------------------------------------*/
+body{background:#0f8096 !important;margin:0;font-family:'Lato', sans-serif;font-weight:400;font-size:12px;font-size:1.2rem;line-height:1.4;color:#fff;}
+ 
+/* Change Width and Height of Logo Image + Add Custom Image File */
+.login form{background:#000 !important;}
+.login h1{background-color:#0f8096;padding-top:15px;padding-bottom:15px;}
+.login h1 a {background-image:url('../img/adecentweb-logo-white.png') !important;background-color:#0f8096;width:100% !important;background-size:90% !important;height:140px !important;margin:0 auto;}
+ 
+/* Add a few changes to the color and style of form itself */
+.login label {color:#fff;font-weight:300;display:block;margin-bottom:1em;}
+.login form {margin:0;border-radius:0;}
+.login form .input {font-weight:normal;}
+ 
+.login #backtoblog a, .login #nav a {display:block;background:#000;color:#e8176e;text-decoration:none;border:none;font-size:10px;font-size:1.0rem;text-align:center;margin-bottom:0;padding:5px 0}
+.login #backtoblog a:hover, .login #nav a:hover {background:#000;color:#fff;}
+
+.login #nav a:first-child{display:block;background:#e8176e;color:#000;text-decoration:none;border:none;font-size:14px;font-size:1.4rem;text-align:center;margin-bottom:10px;}
+.login #nav a:first-child:hover{background:#e8176e;color:#fff;}
+
+.login #login_error, .login .message{padding-top:15px;margin-bottom:0;border:none;background:#e8176e;color:#000;}
+
+.login a.privacy-policy-link{background:#fff;padding:3px 5px;color:#e8176e;text-decoration:none;border-bottom:none;font-size:8px;font-size:0.8rem;}
+ 
+.wp-core-ui #wp-submit {background:#e8176e;position:relative;display:inline-block;/*margin:5px 15px;*/outline:none;color:#000;text-decoration:none;font-weight:400;text-shadow:0 0 1px rgba(255,255,255,0.3);font-size:0.8rem !important;padding:2px 10px 3px 10px;margin:0 0 15px 0;border:none;border-radius:0;box-shadow: none;}
+.wp-core-ui #wp-submit:hover {background:#e8176e;color:#fff;}
+
+.login #itsec-2fa p{color:#fff !important;}
+.login #itsec-2fa a{color:#fff !important;}
+
+.wp-core-ui .button.button-primary{background:#e8176e !important;color:#000;text-decoration:none;border:none;font-size:14px;font-size:1.4rem;text-align:center;margin-bottom:10px !important;}
+.wp-core-ui .button.button-primary:hover{background:#e8176e !important;color:#fff;}
+
+.itsec-pwls-login-fallback__link{color:#fff;}

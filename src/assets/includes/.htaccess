@@ -1,0 +1,8 @@
+# short URLs for RSS and RDF feeds
+# ensure XML and WML are served as UTF-8
+AddType 'application/xml; charset=UTF-8' xml
+AddType 'application/xml; charset=UTF-8' wml
+#
+#
+# RSS feed of qualichain publications
+RewriteRule ^qualichain\.xml$ qualichain_publications_xml.php [L]
