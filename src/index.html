@@ -49,10 +49,37 @@
           <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+    <!-- inline spinner styles to be able to display spinner right away -->
+    <style type="text/css">
+        .container-full {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .vertical-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+    </style>
 </head>
 
 <body>
-    <app-root></app-root>
+    <app-root>
+        <!-- loading layout replaced by app after startup -->
+        <div class="container-full" class="app-loading">
+            <div class="centered vertical-center">
+                <img src="/assets/img/misinfo-loader.gif" alt="MisInfoMe Logo">
+            </div>
+        </div>
+    </app-root>
 
 
     <!-- Bootstrap core JavaScript
