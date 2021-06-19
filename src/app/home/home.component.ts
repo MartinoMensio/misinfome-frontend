@@ -10,6 +10,7 @@ export class HomeComponent implements OnInit {
   
   loading = true;
   data: any;
+  countUpOptions={duration:5};
 
   constructor(private apiService: ApiService) { }
 
