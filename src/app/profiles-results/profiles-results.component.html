@@ -1,0 +1,438 @@
+<app-search></app-search>
+
+<div *ngIf="main_load_state === loadStates.Loading">
+    <div class="container">
+        <div class="centered spinner">
+            <img src="/assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> {{main_loading_string}}
+        </div>
+    </div>
+</div>
+<div *ngIf="main_load_state === loadStates.Loaded">
+    <!-- profile -->
+    <div id="profile">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h2>Twitter Profile</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6">
+                    <div class="profile-icon"><img [src]="results.profile.image_full" alt="Profile image" width="120px" height="120px" class="center"></div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <p><a href="https://twitter.com/{{results.profile.username}}" title="" target="_blank"><strong>@{{results.profile.username}}</strong></a><br> {{results.profile.description}}<br>
+                        <span *ngIf="results.profile.location"><em class="fas fa-map-marker-alt"></em> {{results.profile.location}}<br></span>
+                        <em class="far fa-calendar-alt"></em> {{results.profile.created_at | date}}</p>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-4 centered">
+                    <p><strong>Tweets</strong></p>
+                    <h3><span class="counter">{{results.profile.public_metrics.tweet_count}}</span></h3>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-4 centered">
+                    <p><strong>Following</strong></p>
+                    <h3><span class="counter">{{results.profile.public_metrics.following_count}}</span></h3>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-4 centered">
+                    <p><strong>Followers</strong></p>
+                    <h3><span class="counter">{{results.profile.public_metrics.followers_count}}</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- profile ends -->
+
+    <!-- analysed -->
+    <div id="analysed">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h2>Tweets Analysed</h2>
+                    <p class="centered">Our analysis matches links in the tweets with legitimate credibility assessments.<br>
+                        <!-- TODO modal analysis -->
+                        <a data-toggle="modal" data-target="#analysis" title="Learn more about the analysis">Learn more about the analysis</a></p>
+                    <div class="clearfix margin-bottom-40"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6"></div>
+                <div class="col-lg-4 col-md-4 col-sm-6"></div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <h3 class="purple">Analysis</h3>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6 col-sm-6">
+                    <div class="social-icon"><em class="fab fa-twitter"></em></div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-sm-6">
+                    <p><strong>Tweets retrieved</strong><br></p>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_retrieved_count}}</span></h3>
+                    <p></p>
+                    <p><strong>Tweets containing fact-checked links</strong><br></p>
+                    <!-- TODO this is not fact-checked links -->
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_matching_count}}</span></h3>
+                    <p></p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
+                    <p><strong>Credible</strong><br></p>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <p></p>
+                    <hr />
+                    <p><strong>Low credibility</strong><br></p>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_not_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <p></p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
+                    <p><strong>Mixed</strong><br></p>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_mixed_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <p></p>
+                    <hr />
+                    <p><strong>Unknown</strong><br></p>
+                    <!-- TODO percentage of what? not > 100% -->
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_unknown_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <p></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <!-- full analysis not yet started -->
+                    <div class="btn-group">
+                        <div *ngIf="continue_analysis_enabled && next_results_state !== loadStates.Loading">
+                            <a (click)="continueAnalysis()" title="Click here to expand analysis" class="btn">Expand Analysis</a>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip" data-placement="bottom" title="To include all tweets available from this Twitter account (max 3200). It may take a few minutes to analyse"></em>
+                        </div>
+                        <div *ngIf="next_results_state === loadStates.Loading">
+                            <span>
+                                The<span *ngIf="continue_analysis"> full</span> analysis is in progress: {{next_results_loading_string}}
+                            </span>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip" data-placement="bottom" title="To include all tweets available from this Twitter account (max 3200). It may take a few minutes to analyse"></em>
+                        </div>
+                        <div *ngIf="analysis_finished">
+                            <span>
+                                Full analysis completed
+                            </span>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip" data-placement="bottom" title="This includes all tweets available from this Twitter account (max 3200)"></em>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- analysed ends -->
+
+    <!-- latest fact-checks -->
+    <div id="credibility">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <!-- TODO sort -->
+                    <p><strong>Sort by:</strong>
+                        <select>
+                    <option>Credibility Score (lowest)</option>
+                    <option>Date (newest)</option>
+                </select></p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 align-right">
+                    <h3>Credibility Score <em class="fas fa-info-circle info-icon" data-toggle="tooltip" data-placement="bottom" title="A value ranging from -1 (not credible) to 1 (credible)"></em></h3>
+                </div>
+            </div>
+
+            <div *ngFor="let match of results.matching_tweets; let index = index" [ngClass]="{'list-even': 0 === index % 2,'list-odd': 0 !== index % 2}">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="tweet">
+                            <img [src]="results.profile.image_full" width="160" class="alignleft" alt="Profile image" />
+                            <p><strong>{{results.profile.name}}</strong> <span class="grey">@{{results.profile.username}} - {{match.tweet.created_at | date}}</span><br> {{match.tweet.text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="thumbs">
+                            <img *ngIf="match.coinform_label === 'not_credible'" src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+
+                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
+                                        sources
+                                    </th>
+                                    <th>
+                                        <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="scores">
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Fact-checks</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">https://t.co/B8r8t3Crev?amp=1</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Snopes</td>
+                                    <td>Not credible</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>FullFact</td>
+                                    <td>Pants on fire</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Unreliable Source</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">breitbart.com</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Polifact</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="list-odd">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="tweet">
+                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="thumbs">
+                            <img src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
+                                        sources
+                                    </th>
+                                    <th>
+                                        <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="scores">
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Fact-checks</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">https://t.co/B8r8t3Crev?amp=1</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Snopes</td>
+                                    <td>Not credible</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>FullFact</td>
+                                    <td>Pants on fire</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Unreliable Source</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">breitbart.com</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Polifact</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-even">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="tweet">
+                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="thumbs">
+                            <img src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> 0.4
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><img src="/assets/img/icons/fact-check-green.png" height="30" alt="fact check green tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th>
+                                        <`!--<img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
+                                    <th>
+                                        <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="scores">
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Fact-checks</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">https://t.co/B8r8t3Crev?amp=1</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Snopes</td>
+                                    <td>Not credible</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>FullFact</td>
+                                    <td>Pants on fire</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Unreliable Source</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">breitbart.com</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Polifact</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-odd">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="tweet">
+                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="thumbs">
+                            <img src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><img src="/assets/img/icons/fact-check-yellow.png" height="30" alt="fact check yellow tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th>
+                                        <`!--<img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
+                                    <th>
+                                        <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="scores">
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Fact-checks</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">https://t.co/B8r8t3Crev?amp=1</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Snopes</td>
+                                    <td>Not credible</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>FullFact</td>
+                                    <td>Pants on fire</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr class="light-greenbg purple">
+                                    <td colspan="3"><strong>Unreliable Source</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="#" title="" target="_blank">breitbart.com</a></td>
+                                </tr>
+                                <tr>
+                                    <td>The Washington Post</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Polifact</td>
+                                    <td>False</td>
+                                    <td><a href="#" title="" target="_blank">See report</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- latest fact-checks ends -->
+
+</div>

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { SearchComponent } from './search/search.component';
-import { ResultsComponent } from './results/results.component';
+import { ProfilesResultsComponent } from './profiles-results/profiles-results.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CountUpModule } from 'ngx-countup';
 
@@ -14,7 +14,7 @@ import { CountUpModule } from 'ngx-countup';
     AppComponent,
     HomeComponent,
     SearchComponent,
-    ResultsComponent
+    ProfilesResultsComponent
   ],
   imports: [
     BrowserModule,
