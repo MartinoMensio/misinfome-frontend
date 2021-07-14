@@ -7,6 +7,13 @@
         </div>
     </div>
 </div>
+<div *ngIf="main_load_state === loadStates.Error">
+    <div class="container">
+        <div class="centered spinner">
+            Error {{error_detail}}
+        </div>
+    </div>
+</div>
 <div *ngIf="main_load_state === loadStates.Loaded">
     <!-- profile -->
     <div id="profile">
@@ -78,21 +85,21 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Credible</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
                     <p></p>
                     <hr />
                     <p><strong>Low credibility</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_not_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_not_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
                     <p></p>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Mixed</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_mixed_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_mixed_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
                     <p></p>
                     <hr />
                     <p><strong>Unknown</strong><br></p>
                     <!-- TODO percentage of what? not > 100% -->
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_unknown_count / results.tweets_analysed_stats.tweets_matching_count * 100}}</span>%</h3>
+                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_unknown_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
                     <p></p>
                 </div>
             </div>
@@ -142,19 +149,21 @@
                 </div>
             </div>
 
-            <div *ngFor="let match of results.matching_tweets; let index = index" [ngClass]="{'list-even': 0 === index % 2,'list-odd': 0 !== index % 2}">
+            <pagination-controls id="tweets" (pageChange)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)" [autoHide]="true" previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+            </pagination-controls>
+            <div *ngFor="let match of results.matching_tweets | paginate: { itemsPerPage: 10, currentPage: p, id: 'tweets' }; let index = index" [ngClass]="{'list-even': 0 === index % 2,'list-odd': 0 !== index % 2}">
                 <div class="row">
                     <div class="col-lg-9 col-md-9 col-sm-8">
                         <div class="tweet">
                             <img [src]="results.profile.image_full" width="160" class="alignleft" alt="Profile image" />
-                            <p><strong>{{results.profile.name}}</strong> <span class="grey">@{{results.profile.username}} - {{match.tweet.created_at | date}}</span><br> {{match.tweet.text}}</p>
+                            <p><strong>{{results.profile.name}}</strong> <span class="grey">@{{results.profile.username}} - <a target="_blank" href="https://twitter.com/{{results.profile.username}}/status/{{match.tweet.id}}">{{match.tweet.created_at | date}}</a></span><br>                                {{match.tweet.text}}</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
                             <img *ngIf="match.coinform_label === 'not_credible'" src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
 
-                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score}}
+                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score | number: '1.2-2'}}
                         </div>
                     </div>
                 </div>
@@ -163,58 +172,51 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th *ngIf="match.matching_links.length"><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
                                     <th><img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
                                         sources
                                     </th>
                                     <th>
-                                        <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
+                                        <div class="btn-group"><a (click)="toggleAnalysis(match)" title="{{match.visible ? 'Hide' : 'View'}} Analysis" class="btn toggle-btn">{{match.visible ? 'Hide' : 'View'}} Analysis <em class="fas white" [ngClass]="{'fa-angle-up': match.visible === true,'fa-angle-down': match.visible !== true}"></em></a></div>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="scores">
-                                <tr class="light-greenbg purple">
+                            <tbody class="scores" *ngIf="match.visible">
+                                <!-- fact-checks -->
+                                <tr class="light-greenbg purple" *ngIf="match.matching_links.length">
                                     <td colspan="3"><strong>Fact-checks</strong></td>
                                 </tr>
-                                <tr>
-                                    <td colspan="3"><a href="#" title="" target="_blank">https://t.co/B8r8t3Crev?amp=1</a></td>
-                                </tr>
-                                <tr>
-                                    <td>The Washington Post</td>
-                                    <td>False</td>
-                                    <td><a href="#" title="" target="_blank">See report</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Snopes</td>
-                                    <td>Not credible</td>
-                                    <td><a href="#" title="" target="_blank">See report</a></td>
-                                </tr>
-                                <tr>
-                                    <td>FullFact</td>
-                                    <td>Pants on fire</td>
-                                    <td><a href="#" title="" target="_blank">See report</a></td>
-                                </tr>
-                                <tr class="light-greenbg purple">
+                                <ng-container *ngFor="let link of match.matching_links">
+                                    <tr>
+                                        <td colspan="3"><b><a href="{{link.link}}" title="" target="_blank">{{link.link}}</a></b></td>
+                                    </tr>
+                                    <tr *ngFor="let report of link.fact_checks">
+                                        <td>{{report.origin.name}}</td>
+                                        <td title="{{report.coinform_label.replace('_', ' ')}}">{{(report.original_label.length>6)? (report.original_label | slice:0:40)+'...':(report.original_label)}}</td>
+                                        <td><a href="{{report.report_url}}" title="" target="_blank">See report</a></td>
+                                    </tr>
+                                </ng-container>
+                                <!-- source ratings -->
+                                <tr class="light-greenbg purple" *ngIf="match.matching_sources.length">
                                     <td colspan="3"><strong>Unreliable Source</strong></td>
                                 </tr>
-                                <tr>
-                                    <td colspan="3"><a href="#" title="" target="_blank">breitbart.com</a></td>
-                                </tr>
-                                <tr>
-                                    <td>The Washington Post</td>
-                                    <td>False</td>
-                                    <td><a href="#" title="" target="_blank">See report</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Polifact</td>
-                                    <td>False</td>
-                                    <td><a href="#" title="" target="_blank">See report</a></td>
-                                </tr>
+                                <ng-container *ngFor="let source of match.matching_sources">
+                                    <tr>
+                                        <td colspan="3"><b><a href="{{source.source}}" title="" target="_blank">{{source.source}}</a></b></td>
+                                    </tr>
+                                    <tr *ngFor="let assessment of source.source_assessments">
+                                        <td>{{assessment.origin.name}}</td>
+                                        <td>{{assessment.original_label}}</td>
+                                        <td><a href="{{assessment.url}}" title="" target="_blank">See report</a></td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+            <pagination-controls id="tweets" (pageChange)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)" [autoHide]="true" previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+            </pagination-controls>
 
             <!-- <div class="list-odd">
                 <div class="row">
