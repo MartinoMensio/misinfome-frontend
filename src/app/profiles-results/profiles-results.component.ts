@@ -28,6 +28,9 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
 
   results: any;
 
+  // pagination
+  p: number = 1;
+
   
 
   private sub: any;
@@ -57,6 +60,22 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
       if (this.next_results_state !== LoadStates.Loading) {
         this.analyse();
       }
+    }
+  }
+
+  pageChanged(page: any) {
+    this.p = page;
+  }
+  
+  pageBoundsCorrection(page: any) {
+    this.p = page;
+  }
+  
+  toggleAnalysis(match: any) {
+    if (match.visible) {
+      match.visible = false;
+    } else {
+      match.visible = true;
     }
   }
 
