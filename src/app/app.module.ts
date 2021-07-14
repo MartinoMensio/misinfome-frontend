@@ -8,19 +8,23 @@ import { SearchComponent } from './search/search.component';
 import { ProfilesResultsComponent } from './profiles-results/profiles-results.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CountUpModule } from 'ngx-countup';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     SearchComponent,
-    ProfilesResultsComponent
+    ProfilesResultsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     CountUpModule,
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
