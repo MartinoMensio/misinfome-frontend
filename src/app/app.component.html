@@ -2,15 +2,15 @@
 <div class="container">
     <div class="row">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-            <a href="/" class="noborder home" title="Visit MisInfoMe Homepage"><img src="/assets/img/misinfome-logo-sm.png" alt="MisInfoMe Logo"></a>
+            <a routerLink="/" class="noborder home" title="Visit MisInfoMe Homepage"><img src="/assets/img/misinfome-logo-sm.png" alt="MisInfoMe Logo"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
           </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="menu-item current-menu-item"><a href="/" class="nav-link" title="Visit the Homepage" aria-current="page">Home <span class="sr-only">(current)</span></a></li>
-                    <li class="menu-item"><a href="/about/" class="nav-link" title="Visit the About page">About</a></li>
-                    <li class="menu-item"><a class="contact-link nav-link" data-toggle="modal" data-target="#contact" title="Contact Us">Contact</a></li>
+                    <li class="menu-item current-menu-item"><a routerLink="/" class="nav-link" title="Visit the Homepage" aria-current="page">Home <span class="sr-only">(current)</span></a></li>
+                    <li class="menu-item"><a routerLink="/about" class="nav-link" title="Visit the About page">About</a></li>
+                    <li class="menu-item"><a class="contact-link nav-link" (click)="open_contact()" title="Contact Us">Contact</a></li>
                 </ul>
                 <!--<form class="form-inline mt-2 mt-md-0">
                   <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -31,7 +31,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <p><a data-toggle="modal" data-target="#contact" title="Contact Us">Contact</a></p>
+                <p><a [routerLink]="" (click)="open_contact()" title="Contact Us">Contact</a></p>
                 <p><a href="/#" title="View the privacy policy">Privacy Policy</a></p>
                 <p><a href="/#" title="View the accessibility statement">Accessibility</a></p>
             </div>

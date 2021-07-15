@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { first, map } from 'rxjs/operators';
+import { AnalysisModalComponent } from '../analysis-modal/analysis-modal.component';
 import { ApiService, LoadStates } from '../api.service';
 
 @Component({
@@ -35,7 +37,7 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
 
   private sub: any;
 
-  constructor(private apiService: ApiService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private apiService: ApiService, private router: Router, private route: ActivatedRoute, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -77,6 +79,10 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
     } else {
       match.visible = true;
     }
+  }
+
+  open_analysis_modal() {
+    const modalRef = this.modalService.open(AnalysisModalComponent);
   }
 
   analyse() {

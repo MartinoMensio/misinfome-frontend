@@ -1,0 +1,31 @@
+<!-- analysis modal -->
+<!-- <div class="modal fade padding-top-100" id="analysis" tabindex="-1" role="dialog" aria-labelledby="analysis"> -->
+<!-- <div class="modal-dialog" role="document"> -->
+<!-- <div class="modal-content"> -->
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="activeModal.close('Close click')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!-- <h4 class="modal-title" id="myModalLabel" title="blank">&nbsp;</h4> -->
+    </div>
+    <div ngbAutofocus class="modal-body">
+        <h2>Learn more about the analysis</h2>
+        <p>MisinfoMe starts by retrieving the public tweets created or retweeted by the Twitter account provided in the search bar. Then it goes through these tweets to extract any external links and look for them in a database of fact-checkings.</p>
+        <p>Our database consists of over 120 thousand <a href="https://schema.org/ClaimReview" title="ClaimReview Schema - Opens in a new window" target="_blank">ClaimReview</a> annotations published by Fact-Checkers. ClaimReview is a standard schema used
+            for fact-checking reviews of claims, and from it we collect the URLs (if present) of the fact-checked article, and the validation outcome. MisinfoMe database also contains published source reliability assessments.</p>
+        <p>Initially, the last 500 tweets published by the given account are analysed. The search can be expanded to include all the tweets available from the given account, but this process may take a few minutes to complete!</p>
+
+        <h2>Credibility scores</h2>
+        <p>MisinfoMe assigns a credibility score, ranging between -1 (not credible) to 1 (credible), for each analysed tweet.</p>
+        <p>The score calculation considers all the fact-checking information available for the link in the tweet, including fact-checking assessments and the reputation of the source(s) of information as assessed by fact-checkers. If assessments exist from
+            multiple fact-checkers then they will be combined using a set of rules. More detail can be found in the following paper:</p>
+        <p><strong>Mensio, Martino and Alani, Harith</strong> (2019). <a href="http://oro.open.ac.uk/62771/" title="ORO Publication - Opens in new window" target="_blank">News Source Credibility in the Eyes of Different Assessors</a>. In: Conference for
+            Truth and Trust Online, 4-5 Oct 2019, London, UK</p>
+
+        <h2>Privacy</h2>
+        <p>MisinfoMe uses the official Twitter application programming interface (API) to collect the data it needs for the analyses. Only public accounts and tweets are analysed. MisinfoMe has no access to any blocked accounts and private messages.</p>
+        <p>No information about the users of MisinfoMe is requested, collected, or stored.</p>
+    </div>
+    <!-- </div> -->
+</div>
+<!-- </div> -->
+<!-- analysis modal ends -->
