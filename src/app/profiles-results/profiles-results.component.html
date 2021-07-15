@@ -171,9 +171,13 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th *ngIf="match.matching_links.length"><img src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
-                                    <th><img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
-                                        sources
+                                    <th>
+                                        <div *ngIf="match.matching_links.length"><img src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</div>
+                                    </th>
+                                    <th>
+                                        <div *ngIf="match.matching_sources.length"><img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
+                                            sources
+                                        </div>
                                     </th>
                                     <th>
                                         <div class="btn-group"><a (click)="toggleAnalysis(match)" title="{{match.visible ? 'Hide' : 'View'}} Analysis" class="btn toggle-btn">{{match.visible ? 'Hide' : 'View'}} Analysis <em class="fas white" [ngClass]="{'fa-angle-up': match.visible === true,'fa-angle-down': match.visible !== true}"></em></a></div>
