@@ -10,6 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { CountUpModule } from 'ngx-countup';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AboutComponent } from './about/about.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ContactModalComponent } from './contact-modal/contact-modal.component';
+import { AnalysisModalComponent } from './analysis-modal/analysis-modal.component';
+import { AccuracyModalComponent } from './accuracy-modal/accuracy-modal.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,10 @@ import { AboutComponent } from './about/about.component';
     HomeComponent,
     SearchComponent,
     ProfilesResultsComponent,
-    AboutComponent
+    AboutComponent,
+    ContactModalComponent,
+    AnalysisModalComponent,
+    AccuracyModalComponent
   ],
   imports: [
     BrowserModule,
@@ -25,6 +32,7 @@ import { AboutComponent } from './about/about.component';
     HttpClientModule,
     CountUpModule,
     NgxPaginationModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
