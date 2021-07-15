@@ -14,7 +14,6 @@ import { ApiService, LoadStates } from '../api.service';
 })
 export class ProfilesResultsComponent implements OnInit, OnDestroy {
   state_username: string = '';
-  username = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')]);
   until_id: number | null = null;
 
   loadStates = LoadStates;
@@ -42,11 +41,14 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.state_username = params['username'];
-      this.username.setValue(params['username']);
-      console.log('sub called ' + this.username.value);
-      if (this.username.value) {
+      // this.username.setValue(params['username']);
+      // console.log('sub called ' + this.username.value);
+      if (this.state_username) {
         this.continue_analysis = false;
         this.continue_analysis_enabled = false;
+        this.results = false;
+        this.has_results = false;
+        this.analysis_finished = false;
         this.analyse();
       }
     });
@@ -96,7 +98,7 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
       this.next_results_state = LoadStates.Loading
     }
 
-    this.apiService.analyseProfile(this.username.value, this.until_id).pipe(
+    this.apiService.analyseProfile(this.state_username, this.until_id).pipe(
       map(result_update => {
         console.log(result_update);
         // update the message
