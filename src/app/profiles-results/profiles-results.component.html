@@ -3,7 +3,7 @@
 <div *ngIf="main_load_state === loadStates.Loading">
     <div class="container">
         <div class="centered spinner">
-            <img src="/assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> {{main_loading_string}}
+            <img src="assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> {{main_loading_string}}
         </div>
     </div>
 </div>
@@ -160,9 +160,9 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
-                            <img *ngIf="match.coinform_label === 'not_credible'" src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+                            <img *ngIf="match.coinform_label === 'not_credible'" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
 
-                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score | number: '1.2-2'}}
+                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score | number: '1.2-2'}}
                         </div>
                     </div>
                 </div>
@@ -171,8 +171,8 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th *ngIf="match.matching_links.length"><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
-                                    <th><img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
+                                    <th *ngIf="match.matching_links.length"><img src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
                                         sources
                                     </th>
                                     <th>
@@ -221,13 +221,13 @@
                 <div class="row">
                     <div class="col-lg-9 col-md-9 col-sm-8">
                         <div class="tweet">
-                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <img src="assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
                             <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
-                            <img src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
+                            <img src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
                         </div>
                     </div>
                 </div>
@@ -236,8 +236,8 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><img src="/assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
-                                    <th><img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
+                                    <th><img src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
                                         sources
                                     </th>
                                     <th>
@@ -294,13 +294,13 @@
                 <div class="row">
                     <div class="col-lg-9 col-md-9 col-sm-8">
                         <div class="tweet">
-                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <img src="assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
                             <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
-                            <img src="/assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> 0.4
+                            <img src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> 0.4
                         </div>
                     </div>
                 </div>
@@ -309,9 +309,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><img src="/assets/img/icons/fact-check-green.png" height="30" alt="fact check green tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="assets/img/icons/fact-check-green.png" height="30" alt="fact check green tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
                                     <th>
-                                        <`!--<img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
+                                        <`!--<img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
                                     <th>
                                         <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
                                     </th>
@@ -365,13 +365,13 @@
                 <div class="row">
                     <div class="col-lg-9 col-md-9 col-sm-8">
                         <div class="tweet">
-                            <img src="/assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
+                            <img src="assets/img/misinfome-social.png" width="160" class="alignleft" alt="MisInfoMe Logo" />
                             <p><strong>Lara S G Piccolo</strong> <span class="grey">@larapicc - 6h</span><br> 'Hugs'! Thats how we close and email exchange between Brazilians, even if they are only acquaintances... I think I miss that!!</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
-                            <img src="/assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
+                            <img src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" /> -0.5
                         </div>
                     </div>
                 </div>
@@ -380,9 +380,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><img src="/assets/img/icons/fact-check-yellow.png" height="30" alt="fact check yellow tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
+                                    <th><img src="assets/img/icons/fact-check-yellow.png" height="30" alt="fact check yellow tick" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</th>
                                     <th>
-                                        <`!--<img src="/assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
+                                        <`!--<img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable sources--`></th>
                                     <th>
                                         <div class="btn-group"><a href="#/" title="View Analysis" class="btn toggle-btn">View Analysis <em class="fas fa-angle-up white"></em></a></div>
                                     </th>
