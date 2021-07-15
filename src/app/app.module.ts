@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContactModalComponent } from './contact-modal/contact-modal.component';
 import { AnalysisModalComponent } from './analysis-modal/analysis-modal.component';
 import { AccuracyModalComponent } from './accuracy-modal/accuracy-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AccuracyModalComponent } from './accuracy-modal/accuracy-modal.componen
     CountUpModule,
     NgxPaginationModule,
     NgbModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

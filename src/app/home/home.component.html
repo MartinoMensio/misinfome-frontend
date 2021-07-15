@@ -42,14 +42,14 @@
                 <div class="col-lg-6 col-md-6 col-xs-6">
                     <div class="group">
                         <div class="processed-icon"><em class="fas fa-user"></em></div>
-                        <h3><span [countUp]="data.stats.profiles_misinformed_count / data.stats.profiles_analysed_count * 100" [options]="countUpOptions" class="counter">0</span>% of profiles</h3>
+                        <h3 title="{{data.stats.profiles_misinformed_count}} profiles over {{data.stats.profiles_analysed_count}}"><span [countUp]="data.stats.profiles_misinformed_count * 100 / data.stats.profiles_analysed_count" [options]="countUpOptions" class="counter">0</span>% of profiles</h3>
                         <p class="percent">Spreading misinformation</p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-6">
                     <div class="group">
                         <div class="processed-icon"><em class="fab fa-twitter"></em></div>
-                        <h3><span [countUp]="data.stats.tweets_misinformed_count / data.stats.tweets_analysed_count * 100" [options]="countUpOptions" class="counter">0</span>% of Tweets</h3>
+                        <h3 title="{{data.stats.tweets_misinformed_count}} tweets over {{data.stats.tweets_analysed_count}}"><span [countUp]="data.stats.tweets_misinformed_count * 100 / data.stats.tweets_analysed_count" [options]="countUpOptions" class="counter">0</span>% of Tweets</h3>
                         <p class="percent">with links to misinformation</p>
                     </div>
                 </div>
