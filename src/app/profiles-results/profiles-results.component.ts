@@ -32,6 +32,8 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
   // pagination
   p: number = 1;
 
+  tweets_sorted_by: string = 'credibility';
+
   
 
   private sub: any;
@@ -50,6 +52,7 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
         this.has_results = false;
         this.analysis_finished = false;
         this.analyse();
+        this.p = 1;
       }
     });
   }
@@ -100,6 +103,7 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
 
     this.apiService.analyseProfile(this.state_username, this.until_id).pipe(
       map(result_update => {
+        console.log('map step')
         console.log(result_update);
         // update the message
         const result_update_state = result_update.state.replace('PENDING', '...')
@@ -157,4 +161,11 @@ export class ProfilesResultsComponent implements OnInit, OnDestroy {
     })
   }
 
+  sort_changed(sort: any) {
+    // this.tweets_sorted_by = sort;
+    console.log(this.tweets_sorted_by);
+    this.results.matching_tweets = this.results.matching_tweets.sort((a: any, b: any) => {
+      return parseInt(a.tweet.id) < parseInt(b.tweet.id) ? 1 : -1;
+    });
+  }
 }

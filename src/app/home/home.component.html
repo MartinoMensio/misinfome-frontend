@@ -1,6 +1,6 @@
 <app-search [expanded]="true"></app-search>
 
-<div *ngIf="loading">
+<div *ngIf="load_state === loadStates.Loading">
     <div class="container">
         <div class="centered">
             <img src="assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> loading...
@@ -8,7 +8,15 @@
     </div>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="load_state === loadStates.Error">
+    <div class="container">
+        <div class="centered">
+            Error {{error_detail}}
+        </div>
+    </div>
+</div>
+
+<div *ngIf="load_state === loadStates.Loaded">
     <!-- processed -->
     <div id="processed">
         <div class="container">
@@ -42,14 +50,14 @@
                 <div class="col-lg-6 col-md-6 col-xs-6">
                     <div class="group">
                         <div class="processed-icon"><em class="fas fa-user"></em></div>
-                        <h3 title="{{data.stats.profiles_misinformed_count}} profiles over {{data.stats.profiles_analysed_count}}"><span [countUp]="data.stats.profiles_misinformed_count * 100 / data.stats.profiles_analysed_count" [options]="countUpOptions" class="counter">0</span>% of profiles</h3>
+                        <h3 title="{{data.stats.profiles_misinformed_count}} profiles over {{data.stats.profiles_analysed_count}}"><span [countUp]="data.stats.profiles_misinformed_count * 100.0 / data.stats.profiles_analysed_count" [options]="countUpOptions" class="counter">0</span>% of profiles</h3>
                         <p class="percent">Spreading misinformation</p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-6">
                     <div class="group">
                         <div class="processed-icon"><em class="fab fa-twitter"></em></div>
-                        <h3 title="{{data.stats.tweets_misinformed_count}} tweets over {{data.stats.tweets_analysed_count}}"><span [countUp]="data.stats.tweets_misinformed_count * 100 / data.stats.tweets_analysed_count" [options]="countUpOptions" class="counter">0</span>% of Tweets</h3>
+                        <h3 title="{{data.stats.tweets_misinformed_count}} tweets over {{data.stats.tweets_analysed_count}}"><span [countUp]="data.stats.tweets_misinformed_count * 100.0 / data.stats.tweets_analysed_count" [options]="countUpOptions" class="counter">0</span>% of Tweets</h3>
                         <p class="percent">with links to misinformation</p>
                     </div>
                 </div>
@@ -81,7 +89,7 @@
                         <!-- <p>{{item}}</p> -->
                         <div *ngFor="let item of [data.latest_reviews[index],data.latest_reviews[index + 1]];" class="col-lg-6 col-md-6 col-xs-12">
                             <div style="height: 128px; width: 128px; position: relative;" class="alignleft column">
-                                <img src="{{item.image_url}}" alt="Fact-checker Logo" style="top: 50%; position: absolute; transform: translateY(-50%);" />
+                                <img src="{{item.image_url}}" alt="Fact-checker Logo" style="height: 128px; width: 128px; top: 50%; position: absolute; transform: translateY(-50%);" />
                             </div>
                             <div class="column">
                                 <h3><a href="{{item.fact_check_url}}" title="Read more" target="_blank">{{item.title}}</a></h3>
