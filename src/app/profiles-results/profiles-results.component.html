@@ -84,21 +84,29 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Credible</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
+                    <h3 title="{{results.tweets_analysed_stats.tweets_positive_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
+                        <span class="counter">{{results.tweets_analysed_stats.tweets_positive_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    </h3>
                     <p></p>
                     <hr />
                     <p><strong>Low credibility</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_not_credible_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
+                    <h3 title="{{results.tweets_analysed_stats.tweets_negative_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
+                        <span class="counter">{{results.tweets_analysed_stats.tweets_negative_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    </h3>
                     <p></p>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Mixed</strong><br></p>
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_mixed_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
+                    <h3 title="{{results.tweets_analysed_stats.tweets_mixed_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
+                        <span class="counter">{{results.tweets_analysed_stats.tweets_mixed_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    </h3>
                     <p></p>
                     <hr />
                     <p><strong>Unknown</strong><br></p>
                     <!-- TODO percentage of what? not > 100% -->
-                    <h3><span class="counter">{{results.tweets_analysed_stats.tweets_unknown_count / results.tweets_analysed_stats.tweets_matching_count * 100 | percent}}</span></h3>
+                    <h3 title="{{results.tweets_analysed_stats.tweets_unknown_credibility_count}} tweet over {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
+                        <span class="counter">{{results.tweets_analysed_stats.tweets_unknown_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    </h3>
                     <p></p>
                 </div>
             </div>
@@ -135,12 +143,12 @@
     <div id="credibility">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6" class="form-group">
                     <!-- TODO sort -->
                     <p><strong>Sort by:</strong>
-                        <select>
-                    <option>Credibility Score (lowest)</option>
-                    <option>Date (newest)</option>
+                        <select class="form-control" [(ngModel)]="tweets_sorted_by" (ngModelChange)="sort_changed($event)">
+                    <option value="credibility">Credibility Score (lowest)</option>
+                    <option value="date">Date (newest)</option>
                 </select></p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 align-right">
@@ -160,9 +168,13 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4">
                         <div class="thumbs">
-                            <img *ngIf="match.coinform_label === 'not_credible'" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
-
-                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> {{match.credibility_score | number: '1.2-2'}}
+                            <!-- <img *ngIf="match.coinform_label === 'not_credible'" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> -->
+                            <img *ngIf="match.credibility_score <= -0.6" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+                            <img *ngIf="match.credibility_score <= -0.2 && match.credibility_score > -0.6" src="assets/img/icons/thumbs-mid-down.png" height="40" alt="Thumb mid down" />
+                            <img *ngIf="match.credibility_score <= 0.2 && match.credibility_score > -0.2" src="assets/img/icons/thumbsmidway.png" height="40" alt="Thumb midway" />
+                            <img *ngIf="match.credibility_score <= 0.6 && match.credibility_score > 0.2" src="assets/img/icons/thumbs-mid-up.png" height="40" alt="Thumb mid up" />
+                            <img *ngIf="match.credibility_score > 0.6" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb up" /> {{match.credibility_score | number: '1.2-2'}}
                         </div>
                     </div>
                 </div>
@@ -172,11 +184,24 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <div *ngIf="match.matching_links.length"><img src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" /> Fact-checks</div>
+                                        <div *ngIf="match.matching_links.length">
+                                            <img *ngIf="match.links_label === 'not_credible'" src="assets/img/icons/fact-check-red.png" height="30" alt="fact check red tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" />
+                                            <img *ngIf="match.links_label === 'uncertain'" src="assets/img/icons/fact-check-yellow.png" height="30" alt="fact check yellow tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet" />
+                                            <img *ngIf="match.links_label === 'mostly_credible' || match.links_label === 'credible'" src="assets/img/icons/fact-check-yellow.png" height="30" alt="fact check green tick" data-toggle="tooltip" data-placement="bottom" title="Fact-checking that assessed the link in the tweet"
+                                            /> Fact-checks
+                                        </div>
                                     </th>
                                     <th>
-                                        <div *ngIf="match.matching_sources.length"><img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" /> Unreliable
-                                            sources
+                                        <div *ngIf="match.matching_sources.length">
+                                            <div *ngIf="match.sources_label === 'not_credible'">
+                                                <img src="assets/img/icons/unreliable-red.png" height="30" alt="Unreliable Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" />                                                Unreliable sources
+                                            </div>
+                                            <div *ngIf="match.sources_label === 'uncertain'">
+                                                <img src="assets/img/icons/unreliable-yellow.png" height="30" alt="Uncertain Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" />                                                Uncertain sources
+                                            </div>
+                                            <div *ngIf="match.sources_label === 'mostly_credible' || match.sources_label === 'credible'">
+                                                <img src="assets/img/icons/unreliable-green.png" height="30" alt="Credible Source Icon" data-toggle="tooltip" data-placement="bottom" title="Reputable assessment of the source of information in the tweet" />                                                Reliable sources
+                                            </div>
                                         </div>
                                     </th>
                                     <th>
@@ -201,11 +226,11 @@
                                 </ng-container>
                                 <!-- source ratings -->
                                 <tr class="light-greenbg purple" *ngIf="match.matching_sources.length">
-                                    <td colspan="3"><strong>Unreliable Source</strong></td>
+                                    <td colspan="3"><strong>Sources</strong></td>
                                 </tr>
                                 <ng-container *ngFor="let source of match.matching_sources">
                                     <tr>
-                                        <td colspan="3"><b><a href="{{source.source}}" title="" target="_blank">{{source.source}}</a></b></td>
+                                        <td colspan="3"><b><a href="https://{{source.source}}" title="" target="_blank">{{source.source}}</a></b></td>
                                     </tr>
                                     <tr *ngFor="let assessment of source.source_assessments">
                                         <td>{{assessment.origin.name}}</td>
