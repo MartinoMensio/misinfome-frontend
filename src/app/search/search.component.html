@@ -13,7 +13,7 @@
                     <form [formGroup]="searchForm" class="form-inline my-2 my-lg-0 ml-auto" (ngSubmit)="onSubmit()">
                         <div class="input-group">
                             <div class="form-outline">
-                                <input type="search" id="form1" class="form-control" placeholder="Enter a Twitter account, e.g. BillGates" formControlName="username" [ngClass]="{'input-error': searchForm.controls.username.valid}" />
+                                <input required="true" matInput type="search" id="form1" class="form-control" placeholder="Enter a Twitter account, e.g. BillGates" formControlName="username" [ngClass]="{'input-error': searchForm.controls.username.valid}" pattern="[a-zA-Z0-9_]+" />
                                 <label class="form-label" for="form1">Search</label>
                             </div>
                             <button type="submit" [disabled]="!searchForm.valid" class="btn btn-primary">
