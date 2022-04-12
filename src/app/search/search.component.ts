@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 
 declare var $: any;
@@ -17,9 +18,9 @@ export class SearchComponent implements OnInit {
   counter = 0;
   state_username: string = '';
 
-  
+  username = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')]);
   searchForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')])
+    username: this.username
   })
   private sub: any;
 
@@ -49,6 +50,24 @@ export class SearchComponent implements OnInit {
       //   this.continue_analysis_enabled = false;
       //   this.analyse();
       // }
+    });
+
+    this.username.valueChanges.pipe(
+      debounceTime(500)
+      ).subscribe((value: string) => {
+      // this part manages the pasting and cleans up the form value
+      const trimmed = (value || '').trim();
+      if (trimmed !== value) {
+        this.username.setValue(trimmed);
+        return;
+      }
+      const useless = ['https://twitter.com/', '@'];
+      for (const u of useless) {
+        if (value.startsWith(u)) {
+          this.username.setValue(value.replace(u, ''));
+          return;
+        }
+      }
     });
 
   }
