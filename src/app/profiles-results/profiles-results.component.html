@@ -84,28 +84,28 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Credible</strong><br></p>
-                    <h3 title="{{results.tweets_analysed_stats.tweets_positive_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
-                        <span class="counter">{{results.tweets_analysed_stats.tweets_positive_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    <h3>
+                        <span data-toggle="tooltip" data-placement="bottom" title="{{results.tweets_analysed_stats.tweets_positive_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets" class="counter">{{results.tweets_analysed_stats.tweets_positive_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
                     </h3>
                     <p></p>
                     <hr />
                     <p><strong>Low credibility</strong><br></p>
-                    <h3 title="{{results.tweets_analysed_stats.tweets_negative_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
-                        <span class="counter">{{results.tweets_analysed_stats.tweets_negative_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    <h3>
+                        <span data-toggle="tooltip" data-placement="bottom" title="{{results.tweets_analysed_stats.tweets_negative_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets" class="counter">{{results.tweets_analysed_stats.tweets_negative_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
                     </h3>
                     <p></p>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
                     <p><strong>Mixed</strong><br></p>
-                    <h3 title="{{results.tweets_analysed_stats.tweets_mixed_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
-                        <span class="counter">{{results.tweets_analysed_stats.tweets_mixed_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    <h3>
+                        <span data-toggle="tooltip" data-placement="bottom" title="{{results.tweets_analysed_stats.tweets_mixed_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets" class="counter">{{results.tweets_analysed_stats.tweets_mixed_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
                     </h3>
                     <p></p>
                     <hr />
                     <p><strong>Unknown</strong><br></p>
                     <!-- TODO percentage of what? not > 100% -->
-                    <h3 title="{{results.tweets_analysed_stats.tweets_unknown_credibility_count}} tweet over {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets">
-                        <span class="counter">{{results.tweets_analysed_stats.tweets_unknown_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
+                    <h3>
+                        <span data-toggle="tooltip" data-placement="bottom" title="{{results.tweets_analysed_stats.tweets_unknown_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets" class="counter">{{results.tweets_analysed_stats.tweets_unknown_credibility_count / results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span>
                     </h3>
                     <p></p>
                 </div>
