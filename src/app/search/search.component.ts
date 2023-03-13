@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { ApiService } from '../api.service';
@@ -18,8 +18,8 @@ export class SearchComponent implements OnInit {
   counter = 0;
   state_username: string = '';
 
-  username = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')]);
-  searchForm = new FormGroup({
+  username = new UntypedFormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')]);
+  searchForm = new UntypedFormGroup({
     username: this.username
   })
   private sub: any;
