@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:5000/misinfo/api' //'https://misinfo.me/misinfo/api/'
+  api_url: 'http://127.0.0.1:5000/misinfo/api' //'https://misinfo.me/misinfo/api/'
 };
 
 /*
