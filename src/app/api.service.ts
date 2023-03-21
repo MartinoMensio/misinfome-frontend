@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
-import {delay, map, repeatWhen, switchMap, takeWhile} from 'rxjs/operators';
+import { delay, map, repeatWhen, switchMap, takeWhile } from 'rxjs/operators';
 
 export enum LoadStates {
   None, Loading, Loaded, Error
@@ -24,25 +24,25 @@ export class ApiService {
   getMostPopularEntries() {
     if (this.most_popular_entries.length) {
       return new Observable((observer) => {
-    
+
         // observable execution
         observer.next(this.most_popular_entries)
         observer.complete()
-    })
+      })
     } else {
       return this.httpClient.get(`${this.API_URL}/frontend/v2/home/most_popular_entries`).pipe(
         map((result: any) => {
           this.most_popular_entries = result;
           return result;
-          }))
-        }
+        }))
+    }
   }
 
   createJobProfileAnalysis(screen_name: string, until_id: number | null) {
     if (until_id) {
-      return this.httpClient.get(`${this.API_URL}/frontend/v2/profiles/?screen_name=${screen_name}&until_id=${until_id}`);
+      return this.httpClient.get(`${this.API_URL}/frontend/v2/profiles?screen_name=${screen_name}&until_id=${until_id}`);
     } else {
-      return this.httpClient.get(`${this.API_URL}/frontend/v2/profiles/?screen_name=${screen_name}`);
+      return this.httpClient.get(`${this.API_URL}/frontend/v2/profiles?screen_name=${screen_name}`);
     }
   }
 
@@ -54,8 +54,8 @@ export class ApiService {
     console.log(`getting status ${status_id}`);
     return this.httpClient.get(`${this.API_URL}/jobs/status/${status_id}`).pipe(
       map((res) => {
-      console.log(res);
-      return res;
+        console.log(res);
+        return res;
       })
     );
   }
@@ -73,27 +73,27 @@ export class ApiService {
             delay(2000),
           )),
           // .pipe(
-            // get the result of the job
-            // switchMap(() => {
-            //   console.log('inside switchMap');
-            //   return this.getJobStatus(job_id);
-            // }),
-            // and keep propagating the values while it's not completed
-            takeWhile((val: any) => {
-              console.log('checking the status of the job');
-              console.log(val.state);
-              console.log(val);
-              // turn the failure into an exception
-              if (val.state === 'FAILURE') {
-                // the subscriber will receive an error in the error subscriber
-                // throwError will notify the subscribers
-                throwError(val);
-                throw val; // return false wasn't enough (strange EmptyErrorImpl)
-                // and the interval will stop to run
-              }
-              return val.state !== 'SUCCESS';
-            }, true) // the inclusive flag lets also the false condition to get emitted (completed)
-          );
+          // get the result of the job
+          // switchMap(() => {
+          //   console.log('inside switchMap');
+          //   return this.getJobStatus(job_id);
+          // }),
+          // and keep propagating the values while it's not completed
+          takeWhile((val: any) => {
+            console.log('checking the status of the job');
+            console.log(val.state);
+            console.log(val);
+            // turn the failure into an exception
+            if (val.state === 'FAILURE') {
+              // the subscriber will receive an error in the error subscriber
+              // throwError will notify the subscribers
+              throwError(val);
+              throw val; // return false wasn't enough (strange EmptyErrorImpl)
+              // and the interval will stop to run
+            }
+            return val.state !== 'SUCCESS';
+          }, true) // the inclusive flag lets also the false condition to get emitted (completed)
+        );
       })
     );
   }
