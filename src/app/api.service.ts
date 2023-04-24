@@ -60,6 +60,10 @@ export class ApiService {
     );
   }
 
+  getTweet(tweet_id: string) {
+    return this.httpClient.get(`${this.API_URL}/frontend/v2/tweets/${tweet_id}?wait=true`);
+  }
+
   private keepWatchingJobStatus(o: Observable<Object>) {
     return o.pipe(
       // switch to a new observable

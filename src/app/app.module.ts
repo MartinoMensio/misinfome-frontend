@@ -15,6 +15,7 @@ import { ContactModalComponent } from './contact-modal/contact-modal.component';
 import { AnalysisModalComponent } from './analysis-modal/analysis-modal.component';
 import { AccuracyModalComponent } from './accuracy-modal/accuracy-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TweetResultComponent } from './tweet-result/tweet-result.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AboutComponent,
     ContactModalComponent,
     AnalysisModalComponent,
-    AccuracyModalComponent
+    AccuracyModalComponent,
+    TweetResultComponent
   ],
   imports: [
     BrowserModule,

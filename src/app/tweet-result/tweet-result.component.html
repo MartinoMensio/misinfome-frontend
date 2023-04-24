@@ -1,0 +1,149 @@
+<div>
+    <div style="height: 100px;"></div>
+    <div *ngIf="main_load_state === loadStates.Loading">
+        <div class="container">
+            <div class="centered spinner">
+                <img src="assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> {{main_loading_string}}
+            </div>
+        </div>
+    </div>
+    <div *ngIf="main_load_state === loadStates.Error">
+        <div class="container">
+            <div class="centered spinner">
+                Error {{error_detail}}
+            </div>
+        </div>
+    </div>
+    <div *ngIf="main_load_state === loadStates.Loaded">
+        <div id="profile">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="tweet">
+                            <img [src]="result.author.image_full" width="160" class="alignleft" alt="Profile image" />
+                            <p><a routerLink="/profiles/{{result.author.username}}"><strong>{{result.author.name}}</strong>
+                                    <span class="grey">@{{result.author.username}}</span></a><span class="grey"> -
+                                    <a target="_blank"
+                                        href="https://twitter.com/{{result.author.username}}/status/{{result.tweet.id}}">{{result.tweet.created_at
+                                        | date}}</a></span><br> {{result.tweet.text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="thumbs">
+                            <!-- <img *ngIf="result.coinform_label === 'not_credible'" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+            <img *ngIf="['credible', 'mostly_credible'].includes(result.coinform_label)" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> -->
+                            <img *ngIf="result.credibility_score <= -0.6" src="assets/img/icons/thumbsdown.png"
+                                height="40" alt="Thumb down" />
+                            <img *ngIf="result.credibility_score <= -0.2 && result.credibility_score > -0.6"
+                                src="assets/img/icons/thumbs-mid-down.png" height="40" alt="Thumb mid down" />
+                            <img *ngIf="result.credibility_score <= 0.2 && result.credibility_score > -0.2"
+                                src="assets/img/icons/thumbsmidway.png" height="40" alt="Thumb midway" />
+                            <img *ngIf="result.credibility_score <= 0.6 && result.credibility_score > 0.2"
+                                src="assets/img/icons/thumbs-mid-up.png" height="40" alt="Thumb mid up" />
+                            <img *ngIf="result.credibility_score > 0.6" src="assets/img/icons/thumbsup.png" height="40"
+                                alt="Thumb up" /> {{result.credibility_score | number: '1.2-2'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div *ngIf="result.matching_links.length">
+                                            <img *ngIf="result.links_label === 'not_credible'"
+                                                src="assets/img/icons/fact-check-red.png" height="30"
+                                                alt="fact check red tick" data-toggle="tooltip" data-placement="bottom"
+                                                title="Fact-checking that assessed the link in the tweet" />
+                                            <img *ngIf="result.links_label === 'uncertain'"
+                                                src="assets/img/icons/fact-check-yellow.png" height="30"
+                                                alt="fact check yellow tick" data-toggle="tooltip"
+                                                data-placement="bottom"
+                                                title="Fact-checking that assessed the link in the tweet" />
+                                            <img *ngIf="result.links_label === 'mostly_credible' || result.links_label === 'credible'"
+                                                src="assets/img/icons/fact-check-yellow.png" height="30"
+                                                alt="fact check green tick" data-toggle="tooltip"
+                                                data-placement="bottom"
+                                                title="Fact-checking that assessed the link in the tweet" /> Fact-checks
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div *ngIf="result.matching_sources.length">
+                                            <div *ngIf="result.sources_label === 'not_credible'">
+                                                <img src="assets/img/icons/unreliable-red.png" height="30"
+                                                    alt="Unreliable Source Icon" data-toggle="tooltip"
+                                                    data-placement="bottom"
+                                                    title="Reputable assessment of the source of information in the tweet" />
+                                                Unreliable sources
+                                            </div>
+                                            <div *ngIf="result.sources_label === 'uncertain'">
+                                                <img src="assets/img/icons/unreliable-yellow.png" height="30"
+                                                    alt="Uncertain Source Icon" data-toggle="tooltip"
+                                                    data-placement="bottom"
+                                                    title="Reputable assessment of the source of information in the tweet" />
+                                                Uncertain sources
+                                            </div>
+                                            <div
+                                                *ngIf="result.sources_label === 'mostly_credible' || result.sources_label === 'credible'">
+                                                <img src="assets/img/icons/unreliable-green.png" height="30"
+                                                    alt="Credible Source Icon" data-toggle="tooltip"
+                                                    data-placement="bottom"
+                                                    title="Reputable assessment of the source of information in the tweet" />
+                                                Reliable sources
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="btn-group"><a (click)="toggleAnalysis(result)"
+                                                title="{{result.visible ? 'Hide' : 'View'}} Analysis"
+                                                class="btn toggle-btn">{{result.visible ? 'Hide' : 'View'}} Analysis <em
+                                                    class="fas white"
+                                                    [ngClass]="{'fa-angle-up': result.visible === true,'fa-angle-down': result.visible !== true}"></em></a>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="scores" *ngIf="result.visible">
+                                <!-- fact-checks -->
+                                <tr class="light-greenbg purple" *ngIf="result.matching_links.length">
+                                    <td colspan="3"><strong>Fact-checks</strong></td>
+                                </tr>
+                                <ng-container *ngFor="let link of result.matching_links">
+                                    <tr>
+                                        <td colspan="3"><b><a href="{{link.link}}" title=""
+                                                    target="_blank">{{link.link}}</a></b>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let report of link.fact_checks">
+                                        <td>{{report.origin.name}}</td>
+                                        <td title="{{report.coinform_label.replace('_', ' ')}}">
+                                            {{(report.original_label.length>6)? (report.original_label |
+                                            slice:0:40)+'...':(report.original_label)}}
+                                        </td>
+                                        <td><a href="{{report.report_url}}" title="" target="_blank">See report</a></td>
+                                    </tr>
+                                </ng-container>
+                                <!-- source ratings -->
+                                <tr class="light-greenbg purple" *ngIf="result.matching_sources.length">
+                                    <td colspan="3"><strong>Sources</strong></td>
+                                </tr>
+                                <ng-container *ngFor="let source of result.matching_sources">
+                                    <tr>
+                                        <td colspan="3"><b><a href="https://{{source.source}}" title=""
+                                                    target="_blank">{{source.source}}</a></b></td>
+                                    </tr>
+                                    <tr *ngFor="let assessment of source.source_assessments">
+                                        <td>{{assessment.origin.name}}</td>
+                                        <td>{{assessment.original_label}}</td>
+                                        <td><a href="{{assessment.url}}" title="" target="_blank">See report</a></td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
