@@ -92,8 +92,14 @@ jobs:
       name: install project
       run: npm install
     - 
-      name: Build artifacts
-      run: ng build --base-href /frontend-v2/
+      name: Build artifacts dev
+      run: npm run build-dev
+    - 
+      name: zip artifacts
+      run: pushd dist/misinfome-frontend-v2 && zip -r ../app-dev.zip . && popd
+    - 
+      name: Build artifacts release
+      run: npm run build
     - 
       name: zip artifacts
       run: pushd dist/misinfome-frontend-v2 && zip -r ../app.zip . && popd
@@ -101,7 +107,9 @@ jobs:
       name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/app.zip
+        files: |
+          dist/app.zip
+          dist/app-dev.zip
   update-main-repo:
     name: Update main repo
     runs-on: ubuntu-latest
