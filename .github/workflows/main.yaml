@@ -71,7 +71,7 @@ jobs:
       run: echo "TODO" #coverage xml -i # creates coverage.xml
     - 
       name: Upload coverage data to coveralls.io
-      run: coveralls --service=github
+      run: echo "TODO" #coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   artifact:
