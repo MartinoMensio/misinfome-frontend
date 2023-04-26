@@ -118,11 +118,11 @@ jobs:
     - 
       name: delete release "latest"
       uses: actions/github-script@v4
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { owner, repo } = context.repo
-            await github.repos.deleteRelease({ owner, repo, release_id: "latest" })
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const { owner, repo } = context.repo
+          await github.repos.deleteRelease({ owner, repo, release_id: "latest" })
     - 
       name: Release "latest" again
       uses: softprops/action-gh-release@v1
