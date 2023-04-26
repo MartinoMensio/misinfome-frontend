@@ -99,9 +99,9 @@ jobs:
       run: pushd dist/misinfome-frontend-v2 && zip -r ../app.zip . && popd
     -
       name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/app.zip
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/app.zip
   update-main-repo:
     name: Update main repo
     runs-on: ubuntu-latest
