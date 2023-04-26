@@ -1,0 +1,128 @@
+name: main
+
+on:
+  push:
+    branches:
+      - '*'
+  schedule:
+    - cron: "0 23 * * 0" # weekly on Sunday evening
+
+jobs:
+  npm:
+    name: Update npm (TODO)
+    runs-on: ubuntu-latest
+    steps:
+    - 
+      uses: actions/checkout@v3
+    - 
+      name: Setup npm
+      uses: actions/setup-node@v3
+    - 
+      name: Checking updates for package-lock.json
+      run: npm update
+    - 
+      name: add and commit changes for package-lock.json
+      uses: EndBug/add-and-commit@v9
+      with:
+        # The arguments for the `git add` command (see the paragraph below for more info)
+        # Default: '.'
+        add: 'package-lock.json'
+        # Additional arguments for the git commit command. The --message argument is already set by the message input.
+        # Default: ''
+        commit: --signoff
+
+        # Determines the way the action fills missing author name and email. Three options are available:
+        # - github_actor -> UserName <UserName@users.noreply.github.com>
+        # - user_info -> Your Display Name <your-actual@email.com>
+        # - github_actions -> github-actions <email associated with the github logo>
+        # Default: github_actor
+        default_author: github_actor
+
+        # The message for the commit.
+        # Default: 'Commit from GitHub Actions (name of the workflow)'
+        message: '[automatic] updated package-lock.json'
+
+        # The way the action should handle pathspec errors from the add and remove commands. Three options are available:
+        # - ignore -> errors will be logged but the step won't fail
+        # - exitImmediately -> the action will stop right away, and the step will fail
+        # - exitAtEnd -> the action will go on, every pathspec error will be logged at the end, the step will fail.
+        # Default: ignore
+        pathspec_error_handling: ignore
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: npm
+    steps:
+    - 
+      uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    - 
+      name: Setup npm
+      uses: actions/setup-node@v3
+    - 
+      name: install project
+      run: npm install
+    - 
+      name: Run tests
+      run: echo "TODO"
+    - 
+      name: generate coverage report
+      run: echo "TODO" #coverage xml -i # creates coverage.xml
+    - 
+      name: Upload coverage data to coveralls.io
+      run: coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  artifact:
+    name: Build artifacts
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref_name == 'master'
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    - 
+      name: Setup npm
+      uses: actions/setup-node@v3
+    - 
+      name: install project
+      run: npm install
+    - 
+      name: Build artifacts
+      run: ng build --base-href /frontend-v2/
+    - 
+      name: zip artifacts
+      run: pushd dist/misinfome-frontend-v2 && zip -r ../app.zip . && popd
+    -
+      name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/app.zip
+  update-main-repo:
+    name: Update main repo
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref_name == 'master' # already checked in docker job
+    permissions: write-all
+    steps:
+    - 
+      name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    - 
+      name: Get current sha
+      id: sha
+      run: echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+    - 
+      name: trigger main repo
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.MISINFOME_GH_TOKEN }}
+        repository: MartinoMensio/MisinfoMe
+        event-type: 'Update: ${{ github.event.repository.name }}'
+        client-payload: '{ "submodule": "frontend-v2" , "repository": "${{ github.event.repository.name }}", "commit_sha": "${{ env.SHA }}" }'
