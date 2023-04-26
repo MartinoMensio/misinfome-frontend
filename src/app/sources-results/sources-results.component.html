@@ -1,0 +1,289 @@
+<app-search-source></app-search-source>
+
+<div *ngIf="main_load_state === loadStates.Loading">
+    <div class="container">
+        <div class="centered spinner">
+            <img src="assets/img/misinfo-loader.gif" alt="MisInfoMe Logo"> {{main_loading_string}}
+        </div>
+    </div>
+</div>
+<div *ngIf="main_load_state === loadStates.Error">
+    <div class="container">
+        <div class="centered spinner">
+            Error {{error_detail}}
+        </div>
+    </div>
+</div>
+<div *ngIf="main_load_state === loadStates.Loaded">
+    <!-- profile -->
+    <div id="profile">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h2>Source</h2>
+                    <h2>{{results.itemReviewed}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- profile ends -->
+
+    <!-- analysed -->
+    <div id="analysed">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h2>Assessments</h2>
+                    <p class="centered">Our analysis matches with legitimate credibility assessments.
+                        <br>
+                        <a [routerLink]="[]" (click)="open_analysis_modal()" title="Learn more about the analysis">Learn
+                            more about the analysis</a>
+                    </p>
+                    <div class="clearfix margin-bottom-40"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6"></div>
+                <div class="col-lg-4 col-md-4 col-sm-6"></div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <h3 class="purple">Analysis</h3>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6 col-sm-6">
+                    <div class="social-icon" style="font-size: 50px">
+                        <div class="thumbs">
+                            <!-- <img *ngIf="match.coinform_label === 'not_credible'" src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+                            <img *ngIf="['credible', 'mostly_credible'].includes(match.coinform_label)" src="assets/img/icons/thumbsup.png" height="40" alt="Thumb Up" /> -->
+                            <img *ngIf="results.credibility.value <= -0.6" src="assets/img/icons/thumbsdown.png"
+                                height="40" alt="Thumb down" />
+                            <img *ngIf="results.credibility.value <= -0.2 && results.credibility.value > -0.6"
+                                src="assets/img/icons/thumbs-mid-down.png" height="40" alt="Thumb mid down" />
+                            <img *ngIf="results.credibility.value <= 0.2 && results.credibility.value > -0.2"
+                                src="assets/img/icons/thumbsmidway.png" height="40" alt="Thumb midway" />
+                            <img *ngIf="results.credibility.value <= 0.6 && results.credibility.value > 0.2"
+                                src="assets/img/icons/thumbs-mid-up.png" height="40" alt="Thumb mid up" />
+                            <img *ngIf="results.credibility.value > 0.6" src="assets/img/icons/thumbsup.png" height="40"
+                                alt="Thumb up" /> {{results.credibility.value | number: '1.2-2'}}
+                            <p>Confidence {{results.credibility.confidence | percent: '2.2-2'}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-sm-6">
+                    <p><strong>Assessments retrieved</strong><br></p>
+                    <h3><span class="counter">{{results.assessments.length}}</span></h3>
+                    <p></p>
+                    <p><strong>Fact-checks for this source</strong><br></p>
+                    <!-- TODO this is not fact-checked links -->
+                    <h3><span class="counter">{{factcheckingReports.reports.length}}</span></h3>
+                    <p></p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
+                    <p><strong>Credible</strong><br></p>
+                    <h3>
+                        <!-- <span data-toggle="tooltip" data-placement="bottom"
+                            title="{{results.tweets_analysed_stats.tweets_positive_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets"
+                            class="counter">{{results.tweets_analysed_stats.tweets_positive_credibility_count /
+                            results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span> -->
+                    </h3>
+                    <p></p>
+                    <hr />
+                    <p><strong>Low credibility</strong><br></p>
+                    <h3>
+                        <!-- <span data-toggle="tooltip" data-placement="bottom"
+                            title="{{results.tweets_analysed_stats.tweets_negative_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets"
+                            class="counter">{{results.tweets_analysed_stats.tweets_negative_credibility_count /
+                            results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span> -->
+                    </h3>
+                    <p></p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-sm-6">
+                    <p><strong>Mixed</strong><br></p>
+                    <h3>
+                        <!-- <span data-toggle="tooltip" data-placement="bottom"
+                            title="{{results.tweets_analysed_stats.tweets_mixed_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets"
+                            class="counter">{{results.tweets_analysed_stats.tweets_mixed_credibility_count /
+                            results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span> -->
+                    </h3>
+                    <p></p>
+                    <hr />
+                    <p><strong>Unknown</strong><br></p>
+                    <!-- TODO percentage of what? not > 100% -->
+                    <h3>
+                        <!-- <span data-toggle="tooltip" data-placement="bottom"
+                            title="{{results.tweets_analysed_stats.tweets_unknown_credibility_count}} of {{results.tweets_analysed_stats.tweets_retrieved_count}} Tweets"
+                            class="counter">{{results.tweets_analysed_stats.tweets_unknown_credibility_count /
+                            results.tweets_analysed_stats.tweets_retrieved_count | percent:'.0-2'}}</span> -->
+                    </h3>
+                    <p></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <!-- full analysis not yet started -->
+                    <div class="btn-group">
+                        <div *ngIf="continue_analysis_enabled && next_results_state !== loadStates.Loading">
+                            <a (click)="continueAnalysis()" title="Click here to expand analysis" class="btn">Expand
+                                Analysis</a>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="To include all tweets available from this Twitter account (max 3200). It may take a few minutes to analyse"></em>
+                        </div>
+                        <div *ngIf="next_results_state === loadStates.Loading">
+                            <span>
+                                The<span *ngIf="continue_analysis"> full</span> analysis is in progress:
+                                {{next_results_loading_string}}
+                            </span>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="To include all tweets available from this Twitter account (max 3200). It may take a few minutes to analyse"></em>
+                        </div>
+                        <div *ngIf="analysis_finished">
+                            <span>
+                                Full analysis completed
+                            </span>
+                            <em class="fas fa-info-circle info-icon purple" data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="This includes all tweets available from this Twitter account (max 3200)"></em>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- analysed ends -->
+
+
+    <!-- latest fact-checks -->
+    <div id="credibility">
+        <div class="container">
+
+            <div *ngIf="sourceAssessment.assessments.length === 0">
+                <p>This source has not been evaluated yet!</p>
+            </div>
+            <div *ngIf="sourceAssessment.assessments.length > 0">
+
+
+                <h3>Fact-checks</h3>
+                <div class="row">
+                    <div class="tweet">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div *ngIf="!factcheckingReports">No factchecks found for this source!</div>
+                            <div *ngIf="factcheckingReports">
+                                <div *ngFor="let report of factcheckingReports.reports">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div>
+                                                        <img *ngIf="report.coinform_label === 'not_credible'"
+                                                            src="assets/img/icons/fact-check-red.png" height="30"
+                                                            alt="fact check red tick" data-toggle="tooltip"
+                                                            data-placement="bottom"
+                                                            title="Fact-checking that assessed the link" />
+                                                        <img *ngIf="report.coinform_label === 'uncertain'"
+                                                            src="assets/img/icons/fact-check-yellow.png" height="30"
+                                                            alt="fact check yellow tick" data-toggle="tooltip"
+                                                            data-placement="bottom"
+                                                            title="Fact-checking that assessed the link" />
+                                                        <img *ngIf="report.coinform_label === 'mostly_credible' || report.links_label === 'credible'"
+                                                            src="assets/img/icons/fact-check-yellow.png" height="30"
+                                                            alt="fact check green tick" data-toggle="tooltip"
+                                                            data-placement="bottom"
+                                                            title="Fact-checking that assessed the link" /> Fact-checks
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    "{{report.coinform_label}}" according to {{report.origin.name}}
+                                                    <a [href]="report.report_url"></a>
+                                                </th>
+                                                <th>
+                                                    <div class="btn-group"><a (click)="toggleAnalysis(report)"
+                                                            title="{{report.visible ? 'Hide' : 'View'}} Analysis"
+                                                            class="btn toggle-btn">{{report.visible ? 'Hide' :
+                                                            'View'}}
+                                                            Analysis <em class="fas white"
+                                                                [ngClass]="{'fa-angle-up': report.visible === true,'fa-angle-down': report.visible !== true}"></em></a>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="scores" *ngIf="report.visible">
+
+                                            <tr class="light-greenbg purple">
+                                                <td colspan="3"><strong>Fact-checks</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"><b><a href="{{report.itemReviewed}}" title=""
+                                                            target="_blank">{{report.itemReviewed}}</a></b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{report.origin.name}}</td>
+                                                <td title="{{report.coinform_label.replace('_', ' ')}}">
+                                                    {{(report.original_label.length>6)? (report.original_label |
+                                                    slice:0:40)+'...':(report.original_label)}}
+                                                </td>
+                                                <td><a href="{{report.report_url}}" title="" target="_blank">See
+                                                        report</a></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="sourceAssessment.assessments_without_fc.length">
+                    <h3>Source-level assessments</h3>
+                    <div *ngIf="sourceAssessment.assessments_without_fc.length">
+
+                        <div *ngFor="let assessment of sourceAssessment.assessments_without_fc let index = index"
+                            [ngClass]="{'list-even': 0 === index % 2,'list-odd': 0 !== index % 2}">
+                            <div class="row">
+                                <div class="col-lg-9 col-md-9 col-sm-8">
+                                    <div class="tweet">
+                                        <img [src]="assessment.origin.logo" width="160" class="alignleft"
+                                            alt="Source image" />
+                                        <p><strong><a
+                                                    [href]="assessment.origin.homepage">{{assessment.origin.name}}</a></strong>
+                                            <span class="grey"> </span><br>
+                                            <a [href]="assessment.url" target="_blank">{{assessment.original_label}}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-4">
+                                    <div class="thumbs">
+                                        <img *ngIf="assessment.credibility.value <= -0.6"
+                                            src="assets/img/icons/thumbsdown.png" height="40" alt="Thumb down" />
+                                        <img *ngIf="assessment.credibility.value <= -0.2 && assessment.credibility.value > -0.6"
+                                            src="assets/img/icons/thumbs-mid-down.png" height="40"
+                                            alt="Thumb mid down" />
+                                        <img *ngIf="assessment.credibility.value <= 0.2 && assessment.credibility.value > -0.2"
+                                            src="assets/img/icons/thumbsmidway.png" height="40" alt="Thumb midway" />
+                                        <img *ngIf="assessment.credibility.value <= 0.6 && assessment.credibility.value > 0.2"
+                                            src="assets/img/icons/thumbs-mid-up.png" height="40" alt="Thumb mid up" />
+                                        <img *ngIf="assessment.credibility.value > 0.6"
+                                            src="assets/img/icons/thumbsup.png" height="40" alt="Thumb up" />
+                                        {{assessment.credibility.value | number: '1.2-2'}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- latest fact-checks ends -->
+
+</div>

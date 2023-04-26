@@ -1,0 +1,55 @@
+<p>search works!</p>
+<div [id]="expanded? 'banner' : 'sub-banner'">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1"></div>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <article>
+                    <div *ngIf="expanded">
+                        <div class="centered"><img src="assets/img/misinfome-logo.png" alt="MisInfoMe Logo"></div>
+                        <h1 class="centered">Check a Twitter account for spreading misinformation</h1>
+                    </div>
+                    <!-- search -->
+                    <form [formGroup]="searchForm" class="form-inline my-2 my-lg-0 ml-auto" (ngSubmit)="onSubmit()">
+                        <div class="input-group">
+                            <div class="form-outline">
+                                <input required="true" matInput type="search" id="form1" class="form-control"
+                                    placeholder="Enter a source, e.g. breitbart.com" formControlName="username"
+                                    [ngClass]="{'input-error': searchForm.controls.username.valid}"
+                                    pattern="[a-zA-Z0-9_.]+" />
+                                <label class="form-label" for="form1">Search</label>
+                            </div>
+                            <button type="submit" [disabled]="!searchForm.valid" class="btn btn-primary">
+                                <i *ngIf="expanded" class="icon fas fa-search"></i>
+                                <i *ngIf="!expanded" class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="info">
+                            <i class="fas fa-info-circle info-icon" data-toggle="tooltip" data-placement="bottom"
+                                title="Please be patient as it may take a few minutes to analyse"></i>
+                            <p><strong>Most popular entries:</strong> <span id="rotate">default</span></p>
+                            <!-- hidden search suggestions -->
+                            <ul class="animate-text">
+                                <li>@BreitbartNews</li>
+                                <li>@DailyBuzzLive</li>
+                                <li>@newswarz</li>
+                                <li>@CRG_CRM</li>
+                                <li>@liberty_writers</li>
+                                <li>@LawEnforceToday</li>
+                                <li>@HenryMakow</li>
+                                <li>@LifeZette</li>
+                                <li>@Breaking911</li>
+                            </ul>
+                            <!-- hidden search suggestions ends -->
+                        </div>
+                    </form>
+                    <!-- search ends -->
+                </article>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1"></div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<!-- search end -->

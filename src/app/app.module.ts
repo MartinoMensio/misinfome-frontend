@@ -16,6 +16,8 @@ import { AnalysisModalComponent } from './analysis-modal/analysis-modal.componen
 import { AccuracyModalComponent } from './accuracy-modal/accuracy-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TweetResultComponent } from './tweet-result/tweet-result.component';
+import { SourcesResultsComponent } from './sources-results/sources-results.component';
+import { SearchSourceComponent } from './search-source/search-source.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { TweetResultComponent } from './tweet-result/tweet-result.component';
     ContactModalComponent,
     AnalysisModalComponent,
     AccuracyModalComponent,
-    TweetResultComponent
+    TweetResultComponent,
+    SourcesResultsComponent,
+    SearchSourceComponent
   ],
   imports: [
     BrowserModule,

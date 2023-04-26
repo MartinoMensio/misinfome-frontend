@@ -50,6 +50,10 @@ export class ApiService {
     return this.keepWatchingJobStatus(this.createJobProfileAnalysis(screen_name, until_id));
   }
 
+  analyseSource(source_id: string) {
+    return this.httpClient.get(`${this.API_URL}/credibility/sources?source=${source_id}`);
+  }
+
   getJobStatus(status_id: string) {
     console.log(`getting status ${status_id}`);
     return this.httpClient.get(`${this.API_URL}/jobs/status/${status_id}`).pipe(
