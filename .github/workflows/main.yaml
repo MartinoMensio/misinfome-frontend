@@ -107,6 +107,7 @@ jobs:
       name: Release
       uses: softprops/action-gh-release@v1
       with:
+        tag: latest
         files: |
           dist/app.zip
           dist/app-dev.zip
