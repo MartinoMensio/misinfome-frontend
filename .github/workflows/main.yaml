@@ -104,7 +104,27 @@ jobs:
       name: zip artifacts
       run: pushd dist/misinfome-frontend-v2 && zip -r ../app.zip . && popd
     -
-      name: Release
+      name: Get current date # for tagging the image, can go back in time if latest is problematic
+      id: date
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+    - 
+      name: Release ${{ env.TODAY }}
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.TODAY }}
+        files: |
+          dist/app.zip
+          dist/app-dev.zip
+    - 
+      name: delete release "latest"
+      uses: actions/github-script@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo } = context.repo
+            await github.repos.deleteRelease({ owner, repo, release_id: "latest" })
+    - 
+      name: Release "latest" again
       uses: softprops/action-gh-release@v1
       with:
         tag_name: latest
