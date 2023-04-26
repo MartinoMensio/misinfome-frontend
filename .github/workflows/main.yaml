@@ -9,7 +9,7 @@ on:
 
 jobs:
   npm:
-    name: Update npm (TODO)
+    name: Update npm
     runs-on: ubuntu-latest
     steps:
     - 
