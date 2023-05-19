@@ -252,7 +252,8 @@
                                         <p><strong><a
                                                     [href]="assessment.origin.homepage">{{assessment.origin.name}}</a></strong>
                                             <span class="grey"> </span><br>
-                                            <a [href]="assessment.url" target="_blank">{{assessment.original_label}}</a>
+                                            <a [href]="assessment.url" target="_blank">{{assessment.original_label ||
+                                                'Assessment'}}</a>
                                         </p>
                                     </div>
                                 </div>
