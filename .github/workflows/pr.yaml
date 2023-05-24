@@ -5,9 +5,10 @@ on:
 
 jobs:
   trigger-main-branch:
-    name: Update npm
+    name: trigger main branch
     runs-on: ubuntu-latest
     # if: github.actor == 'dependabot[bot]'
+    permissions: write-all
     steps:
     - 
       name: trigger main workflow
